@@ -50,3 +50,8 @@ wandb/
 # Temporary
 tmp/
 temp/
+
+#Local
+copilot_chat.ipynb
+Current_task.md
+Main_task.md
