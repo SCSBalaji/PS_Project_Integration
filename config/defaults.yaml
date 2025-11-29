@@ -1,0 +1,79 @@
+# =============================================================================
+# REPRODUCIBILITY SETTINGS
+# =============================================================================
+reproducibility:
+  seed: 42
+  python_seed: 42
+  numpy_seed: 42
+  torch_seed: 42
+  cuda_seed: 42
+  cudnn_deterministic: true
+  cudnn_benchmark: false
+
+# =============================================================================
+# DATASET SETTINGS
+# =============================================================================
+dataset:
+  name: "PlantVillage"
+  variant: "color"  # Options: color, grayscale, segmented
+  num_classes: 38
+  image_size: 224
+  split_ratio:
+    train: 0.70
+    val: 0.15
+    test: 0.15
+
+# =============================================================================
+# DATALOADER SETTINGS
+# =============================================================================
+dataloader:
+  batch_size: 64
+  num_workers: 4
+  pin_memory: true
+  prefetch_factor: 2
+
+# =============================================================================
+# NORMALIZATION (ImageNet defaults)
+# =============================================================================
+normalization:
+  mean: [0.485, 0.456, 0.406]
+  std: [0.229, 0.224, 0.225]
+
+# =============================================================================
+# TRAINING SETTINGS
+# =============================================================================
+training:
+  num_epochs: 10
+  learning_rate: 0.001
+  optimizer: "Adam"
+  weight_decay: 0.0
+  scheduler:
+    name: "ReduceLROnPlateau"
+    mode: "min"
+    factor: 0.5
+    patience: 3
+
+# =============================================================================
+# MODEL SETTINGS
+# =============================================================================
+model:
+  name: "MobilePlantViT"
+  pretrained_backbone: true
+
+# =============================================================================
+# EXPERIMENT SETTINGS
+# =============================================================================
+experiment:
+  name: "default_run"
+  output_dir: "experiments"
+  save_checkpoints: true
+  save_best_only: true
+
+# =============================================================================
+# LOGGING SETTINGS
+# =============================================================================
+logging:
+  use_wandb: false
+  use_tensorboard: true
+  log_interval: 10  # Log every N batches
+  verbose: true
