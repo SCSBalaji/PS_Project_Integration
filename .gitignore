@@ -52,6 +52,8 @@ tmp/
 temp/
 
 #Local
-copilot_chat.ipynb
+copilot_chat_stage1.ipynb
+copilot_chat_stage2.ipynb
+copilot_chat_stage3.ipynb
 Current_task.md
 Main_task.md
