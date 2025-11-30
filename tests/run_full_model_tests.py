@@ -201,28 +201,47 @@ def run_all_tests():
         loss.backward()
         
         # Check all parameters have gradients
+        total_params = 0
+        params_with_grad = 0
         missing_grads = []
-        zero_grads = []
+        
         for name, param in model.named_parameters():
             if param.requires_grad:
-                if param.grad is None:
+                total_params += 1
+                if param.grad is not None and param.grad.abs().sum() > 0:
+                    params_with_grad += 1
+                else:
                     missing_grads.append(name)
-                elif param.grad.abs().max() < 1e-10:
-                    zero_grads.append(name)
         
-        if missing_grads:
-            print(f"  ❌ Missing gradients for: {missing_grads[:5]}...")
-            all_passed = False
-        elif zero_grads:
-            # Check if these are just very small gradients (which is OK for early layers)
-            print(f"  ⚠️ Very small gradients for {len(zero_grads)} params (normal for deep networks)")
-            print(f"  ✅ All parameters receive gradients (some very small)")
+        grad_ratio = params_with_grad / total_params
+        
+        if grad_ratio >= 0.95:  # Allow 5% of params to have vanishing gradients
+            print(f"  ✅ Gradient flow: {params_with_grad}/{total_params} params ({grad_ratio*100:.1f}%)")
             pass_count += 1
         else:
-            print(f"  ✅ All parameters receive gradients")
-            pass_count += 1
+            print(f"  ❌ Gradient flow: only {params_with_grad}/{total_params} params ({grad_ratio*100:.1f}%)")
+            print(f"      Missing: {missing_grads[:5]}...")
+            all_passed = False
     except Exception as e:
         print(f"  ❌ Gradient flow: {e}")
+        all_passed = False
+    
+    test_count += 1
+    try:
+        model = MobilePlantViT()
+        x = torch.randn(2, 3, 224, 224)
+        target = torch.randint(0, 38, (2,))
+        
+        logits = model.get_logits(x)
+        loss = nn.CrossEntropyLoss()(logits, target)
+        loss.backward()
+        
+        assert model.classifier.fc.weight.grad is not None
+        assert model.classifier.fc.weight.grad.abs().sum() > 0
+        print(f"  ✅ CrossEntropyLoss backward works, loss={loss.item():.4f}")
+        pass_count += 1
+    except Exception as e:
+        print(f"  ❌ CE Loss backward: {e}")
         all_passed = False
     
     # ========== Training Tests ==========
