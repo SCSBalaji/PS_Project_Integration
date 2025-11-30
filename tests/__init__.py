@@ -1,3 +1,3 @@
 """
-Test suite for MobilePlantViT project.
+Test suite for MobilePlantViT blocks and models.
 """
