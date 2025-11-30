@@ -9,6 +9,7 @@ from .attention import LinearDifferentialAttention, NaiveFullAttention
 from .patch_embed import PatchEmbedding
 from .positional_encoding import PositionalEncoding
 from .ffn import BottleneckFFN, ResidualLayerNormBlock
+from .classifier import GlobalAveragePooling, ClassifierHead, CombinedClassifier
 
 __all__ = [
     'GhostConv',
@@ -22,4 +23,7 @@ __all__ = [
     'PositionalEncoding',
     'BottleneckFFN',
     'ResidualLayerNormBlock',
+    'GlobalAveragePooling',
+    'ClassifierHead',
+    'CombinedClassifier',
 ]
