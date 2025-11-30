@@ -1,17 +1,20 @@
 """
-MobilePlantViT: Lightweight Hybrid CNN-Transformer for Plant Disease Classification.
+MobilePlantViT Source Package.
 
-This package provides:
-- blocks: Individual neural network building blocks
-- models: Complete model implementations
-- utils: Testing and benchmarking utilities
+This package contains:
+- blocks: Individual building blocks for the MobilePlantViT architecture
+- models: Complete model implementations including MobilePlantViT
+
+Usage:
+    from src.models import MobilePlantViT, MobilePlantViTConfig
+    from src.models import mobileplant_vit_tiny, mobileplant_vit_small
+    from src.blocks import GhostConv, FusedInvertedResidualBlock
 """
 
-from . import blocks
-from . import models
-from . import utils
+__version__ = "1.0.0"
+__author__ = "MobilePlantViT Team"
 
-# Convenience imports
+# Package-level imports for convenience
 from .models import (
     MobilePlantViT,
     MobilePlantViTConfig,
@@ -21,16 +24,37 @@ from .models import (
     mobileplant_vit_large,
 )
 
-__version__ = "0.1.0"
+# Also expose key blocks at package level
+from .blocks import (
+    GhostConv,
+    CoordAtt,
+    FusedInvertedResidualBlock,
+    LinearDifferentialAttention,
+    PatchEmbedding,
+    PositionalEncoding,
+    BottleneckFFN,
+    ResidualLayerNormBlock,
+    GlobalAveragePooling,
+    ClassifierHead,
+)
 
 __all__ = [
-    'blocks',
-    'models',
-    'utils',
-    'MobilePlantViT',
-    'MobilePlantViTConfig',
-    'mobileplant_vit_tiny',
-    'mobileplant_vit_small',
-    'mobileplant_vit_base',
-    'mobileplant_vit_large',
+    # Models
+    "MobilePlantViT",
+    "MobilePlantViTConfig",
+    "mobileplant_vit_tiny",
+    "mobileplant_vit_small",
+    "mobileplant_vit_base",
+    "mobileplant_vit_large",
+    # Blocks
+    "GhostConv",
+    "CoordAtt",
+    "FusedInvertedResidualBlock",
+    "LinearDifferentialAttention",
+    "PatchEmbedding",
+    "PositionalEncoding",
+    "BottleneckFFN",
+    "ResidualLayerNormBlock",
+    "GlobalAveragePooling",
+    "ClassifierHead",
 ]
