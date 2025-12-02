@@ -1,0 +1,37 @@
+Input Image (3, 224, 224)
+         │
+         ▼
+┌─────────────────────────────────────┐
+│     CNN STAGE (Local Features)      │
+├─────────────────────────────────────┤
+│  GhostConv (3→64, stride=2)         │  → (64, 112, 112)
+│  Fused-IR Block (64→128, stride=2)  │  → (128, 56, 56)
+│  Coordinate Attention               │  → (128, 56, 56)
+└─────────────────────────────────────┘
+         │
+         ▼
+┌─────────────────────────────────────┐
+│    TRANSITION (CNN → Transformer)   │
+├─────────────────────────────────────┤
+│  Patch Embedding (128→256)          │  → (196, 256)  [14×14 patches]
+│  Positional Encoding                │  → (196, 256)
+└─────────────────────────────────────┘
+         │
+         ▼
+┌─────────────────────────────────────┐
+│  TRANSFORMER STAGE (Global Context) │
+├─────────────────────────────────────┤
+│  × 3 Transformer Blocks:            │
+│    ├─ Linear Differential Attention │
+│    ├─ Residual LayerNorm Block      │
+│    └─ Bottleneck FFN                │
+└─────────────────────────────────────┘
+         │
+         ▼
+┌─────────────────────────────────────┐
+│       CLASSIFIER STAGE              │
+├─────────────────────────────────────┤
+│  Global Average Pooling             │  → (256,)
+│  Classifier Head (256→38)           │  → (38,)
+│  Softmax (in forward())             │  → probabilities
+└─────────────────────────────────────┘
